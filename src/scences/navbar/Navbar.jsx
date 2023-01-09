@@ -42,7 +42,7 @@ const Navbar = () => {
   const primaryLight = theme.palette.primary.light;
   const alt = theme.palette.background.alt;
 
-  //const fullName = `${user.fullName} ${user.lastName}`;
+  const fullName = `${user.firstName} ${user.lastName}`;
 
   return (
     <FlexBetween padding={"1rem 6%"} backgroundColor={alt}>
@@ -92,7 +92,7 @@ const Navbar = () => {
           <Help sx={{ fontSize: "25px" }} />
           <FormControl>
             <Select
-              value="Thant Zin Win"
+              value={fullName}
               sx={{
                 backgroundColor: neutralLight,
                 width: "150px",
@@ -108,8 +108,8 @@ const Navbar = () => {
               }}
               input={<InputBase />}
             >
-              <MenuItem value={"Thant Zin Win"}>
-                <Typography>Thant Zin Win</Typography>
+              <MenuItem value={fullName}>
+                <Typography>{fullName}</Typography>
               </MenuItem>
               <MenuItem onClick={() => dispatch(setLogout())}>Log Out</MenuItem>
             </Select>
@@ -163,7 +163,7 @@ const Navbar = () => {
             <Help sx={{ fontSize: "25px" }} />
             <FormControl>
               <Select
-                value="Thant Zin Win"
+                value={fullName}
                 sx={{
                   backgroundColor: neutralLight,
                   width: "150px",
@@ -179,8 +179,8 @@ const Navbar = () => {
                 }}
                 input={<InputBase />}
               >
-                <MenuItem value={"Thant Zin Win"}>
-                <Typography>Thant Zin Win</Typography>
+                <MenuItem value={fullName}>
+                <Typography>{fullName}</Typography>
               </MenuItem>
                 <MenuItem onClick={() => dispatch(setLogout())}>
                   Log Out

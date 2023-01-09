@@ -1,4 +1,4 @@
-import { Routes,  Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import HomePage from "./scences/homePage/HomePage";
 import LoginPage from "./scences/loginPage/LoginPage";
 import ProfilePage from "./scences/profilePage/ProfilePage";
@@ -11,15 +11,22 @@ import { themeSettings } from "./theme";
 function App() {
   const mode = useSelector((state) => state.mode);
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
+  const isAuth = Boolean(useSelector((state) => state.token));
 
   return (
     <div>
       <ThemeProvider theme={theme}>
-        <CssBaseline/>
+        <CssBaseline />
         <Routes>
-          <Route path="/" exact  element={<LoginPage />} />
-          <Route path="/home" element={<HomePage />} />
-          <Route path="/profile/:userId" element={<ProfilePage />} />
+          <Route path="/" exact element={<LoginPage />} />
+          <Route
+            path="/home"
+            element={isAuth ? <HomePage /> : <Navigate to={"/"} />}
+          />
+          <Route
+            path="/profile/:userId"
+            element={isAuth ? <ProfilePage /> : <Navigate to={"/"} />}
+          />
         </Routes>
       </ThemeProvider>
     </div>

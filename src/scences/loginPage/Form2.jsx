@@ -68,7 +68,7 @@ const Form = () => {
     }
 
     const savedUserResponse = await fetch(
-      "http://localhost:3001/auth/register",
+      "http://localhost:8000/auth/register",
       {
         method: "POST",
         body: formData,
@@ -83,11 +83,14 @@ const Form = () => {
   };
 
   const login = async (values, onSubmitProps) => {
-    const loggedInResponse = await fetch("http://localhost:3001/auth/login", {
+    console.log("values",values);
+    const loggedInResponse = await fetch("http://localhost:8000/auth/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(values),
     });
+
+    console.log("loggedInResponse",loggedInResponse)
     const loggedIn = await loggedInResponse.json();
     onSubmitProps.resetForm();
     if (loggedIn) {
@@ -214,7 +217,7 @@ const Form = () => {
             )}
 
             <TextField
-              label="Email"
+              label="email"
               onBlur={handleBlur}
               onChange={handleChange}
               value={values.email}
@@ -224,7 +227,7 @@ const Form = () => {
               sx={{ gridColumn: "span 4" }}
             />
             <TextField
-              label="Password"
+              label="password"
               type="password"
               onBlur={handleBlur}
               onChange={handleChange}

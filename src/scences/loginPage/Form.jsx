@@ -69,7 +69,7 @@ const Form = () => {
     console.log("form",formData)
 
     const savedUserResponse = await fetch(
-      "http://localhost:3001/auth/register",
+      "http://localhost:8000/auth/register",
       {
         method: "POST",
         body: formData,
@@ -88,7 +88,7 @@ const Form = () => {
 
     console.log("values",values)
     const loggeInResponse = await fetch(
-      "http://localhost:3001/auth/login",
+      "http://localhost:8000/auth/login",
       {
         method: "POST",
         headers:{"Content-Type" : "application/json"},
