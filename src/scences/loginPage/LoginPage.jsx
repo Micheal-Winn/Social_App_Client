@@ -1,7 +1,8 @@
 import React from "react";
 
 import { Box, Typography, useTheme, useMediaQuery } from "@mui/material";
-import Form from "./Form"
+import Form from "./Form";
+import Form2 from "./Form2"
 
 const LoginPage = () => {
   const theme = useTheme();
@@ -30,7 +31,7 @@ const LoginPage = () => {
         <Typography fontWeight={"500"} variant="h5" sx={{mb:"1.5rem"}}>
           Welcome to My Socail App, the Social Media for Sociopaths!
         </Typography>
-        <Form/>
+        <Form2/>
       </Box>
     </Box>
   );

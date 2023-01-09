@@ -1,5 +1,4 @@
 import { useState } from "react";
-
 import {
   Box,
   Button,
@@ -8,7 +7,6 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import { Formik } from "formik";
 import * as yup from "yup";
@@ -51,22 +49,23 @@ const initialValuesLogin = {
 const Form = () => {
   const [pageType, setPageType] = useState("login");
   const { palette } = useTheme();
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const isNonMobile = useMediaQuery("(min-width : 600px)");
+  const isNonMobile = useMediaQuery("(min-width:600px)");
   const isLogin = pageType === "login";
   const isRegister = pageType === "register";
 
-  const register = async (values, onSubmitPorps) => {
+  const register = async (values, onSubmitProps) => {
     // this allows us to send form info with image
     const formData = new FormData();
     for (let value in values) {
-      formData.append(value, values[value]);
+      formData.set(value, values[value]);
     }
-    formData.append("picturePath", values.picture.name);
+    formData.set("picturePath", values.picture.name);
 
-    console.log("form",formData)
+    for (var key of formData.entries()) {
+        console.log(key[0] + ', ' + key[1])
+    }
 
     const savedUserResponse = await fetch(
       "http://localhost:3001/auth/register",
@@ -76,40 +75,35 @@ const Form = () => {
       }
     );
     const savedUser = await savedUserResponse.json();
-    console.log("save",savedUser)
-    onSubmitPorps.resetForm();
+    onSubmitProps.resetForm();
 
-    if(savedUser){
-      setPageType("login")
+    if (savedUser) {
+      setPageType("login");
     }
   };
 
-  const login = async(values,onSubmitPorps)=>{
-
-    console.log("values",values)
-    const loggeInResponse = await fetch(
-      "http://localhost:3001/auth/login",
-      {
-        method: "POST",
-        headers:{"Content-Type" : "application/json"},
-        body: JSON.stringify(values),
-      }
-    );
-
-    const loggedIn = await loggeInResponse.json();
-    onSubmitPorps.resetForm();
-    if(loggedIn){
-      dispatch(setLogin({
-        user: loggedIn.user,
-        token: loggedIn.token
-      }));
-      navigate("/home")
+  const login = async (values, onSubmitProps) => {
+    const loggedInResponse = await fetch("http://localhost:3001/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(values),
+    });
+    const loggedIn = await loggedInResponse.json();
+    onSubmitProps.resetForm();
+    if (loggedIn) {
+      dispatch(
+        setLogin({
+          user: loggedIn.user,
+          token: loggedIn.token,
+        })
+      );
+      navigate("/home");
     }
-  }
+  };
 
-  const handleFormSubmit = async (values, onSubmitPorps) => {
-    if (isLogin) await login(values, onSubmitPorps);
-    if (isRegister) await register(values, onSubmitPorps);
+  const handleFormSubmit = async (values, onSubmitProps) => {
+    if (isLogin) await login(values, onSubmitProps);
+    if (isRegister) await register(values, onSubmitProps);
   };
 
   return (
@@ -130,19 +124,17 @@ const Form = () => {
       }) => (
         <form onSubmit={handleSubmit}>
           <Box
-            display={"grid"}
-            gap={"30px"}
-            gridTemplateColumns="repeat(4,minmax(0,1fr))"
+            display="grid"
+            gap="30px"
+            gridTemplateColumns="repeat(4, minmax(0, 1fr))"
             sx={{
-              "& > div": {
-                gridColumn: isNonMobile ? undefined : "span 4",
-              },
+              "& > div": { gridColumn: isNonMobile ? undefined : "span 4" },
             }}
           >
             {isRegister && (
               <>
                 <TextField
-                  label="First Name" //display name
+                  label="First Name"
                   onBlur={handleBlur}
                   onChange={handleChange}
                   value={values.firstName}
@@ -151,11 +143,10 @@ const Form = () => {
                     Boolean(touched.firstName) && Boolean(errors.firstName)
                   }
                   helperText={touched.firstName && errors.firstName}
-                  sx={{ gridColumn: "span 2" }}// override
+                  sx={{ gridColumn: "span 2" }}
                 />
-
                 <TextField
-                  label="Last Name" //display name
+                  label="Last Name"
                   onBlur={handleBlur}
                   onChange={handleChange}
                   value={values.lastName}
@@ -164,9 +155,8 @@ const Form = () => {
                   helperText={touched.lastName && errors.lastName}
                   sx={{ gridColumn: "span 2" }}
                 />
-
                 <TextField
-                  label="Location" //display name
+                  label="Location"
                   onBlur={handleBlur}
                   onChange={handleChange}
                   value={values.location}
@@ -175,9 +165,8 @@ const Form = () => {
                   helperText={touched.location && errors.location}
                   sx={{ gridColumn: "span 4" }}
                 />
-
                 <TextField
-                  label="Occupation" //display name
+                  label="Occupation"
                   onBlur={handleBlur}
                   onChange={handleChange}
                   value={values.occupation}
@@ -188,18 +177,17 @@ const Form = () => {
                   helperText={touched.occupation && errors.occupation}
                   sx={{ gridColumn: "span 4" }}
                 />
-
                 <Box
-                  gridColumn={"span 4"}
+                  gridColumn="span 4"
                   border={`1px solid ${palette.neutral.medium}`}
                   borderRadius="5px"
                   p="1rem"
                 >
                   <Dropzone
-                    acceptFiles=".jpg,.jpeg,.png"
+                    acceptedFiles=".jpg,.jpeg,.png"
                     multiple={false}
-                    onDrop={(acceptFiles) =>
-                      setFieldValue("picture", acceptFiles[0])
+                    onDrop={(acceptedFiles) =>
+                      setFieldValue("picture", acceptedFiles[0])
                     }
                   >
                     {({ getRootProps, getInputProps }) => (
@@ -226,7 +214,7 @@ const Form = () => {
             )}
 
             <TextField
-              label="email" //display name
+              label="Email"
               onBlur={handleBlur}
               onChange={handleChange}
               value={values.email}
@@ -235,10 +223,9 @@ const Form = () => {
               helperText={touched.email && errors.email}
               sx={{ gridColumn: "span 4" }}
             />
-
             <TextField
-              label="password" //display name
-              type={"password"}
+              label="Password"
+              type="password"
               onBlur={handleBlur}
               onChange={handleChange}
               value={values.password}
@@ -249,7 +236,7 @@ const Form = () => {
             />
           </Box>
 
-          {/*Buttons */}
+          {/* BUTTONS */}
           <Box>
             <Button
               fullWidth
