@@ -25,21 +25,22 @@ import WidgetWrapper from "../../components/WidgetWrapper";
 
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setPosts } from "../../state";
+import { setPosts } from "../../state/state";
 
 const MyPostWidget = ({ picturePath }) => {
   const dispatch = useDispatch();
   const [isImage, setIsImage] = useState(false);
   const [image, setImage] = useState(null);
   const [post, setPost] = useState(""); //descriptions
-  const { palette } = useTheme;
+  const { palette } = useTheme();
   const { _id } = useSelector((state) => state.user);
   const token = useSelector((state) => state.token);
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
-  const mediumManin = palette.neutral.mediumMain;
+  const mediumMain = palette.neutral.mediumMain;
   const medium = palette.neutral.medium;
 
   const handlePost = async () => {
+    console.log("token2", token);
     const formData = new FormData();
     formData.append("userId", _id);
     formData.append("description", post);
@@ -121,6 +122,57 @@ const MyPostWidget = ({ picturePath }) => {
           </Dropzone>
         </Box>
       )}
+
+      <Divider sx={{ margin: "1.25rem 0" }} />
+
+      <FlexBetween>
+        <FlexBetween gap={"0.25rem"} onClick={() => setIsImage(!isImage)}>
+          <ImageOutlined sx={{ color: mediumMain }} />
+          <Typography
+            color={mediumMain}
+            sx={{ "&:hover": { color: medium, cursor: "pointer" } }}
+          >
+            Image
+          </Typography>
+        </FlexBetween>
+
+        {isNonMobileScreens ? (
+          <>
+            <FlexBetween gap={"0.25rem"}>
+              <GifBoxOutlined sx={{ color: mediumMain }} />
+              <Typography color={mediumMain}>Clip</Typography>
+            </FlexBetween>
+
+            <FlexBetween gap={"0.25rem"}>
+              <AttachFileOutlined sx={{ color: mediumMain }} />
+              <Typography color={mediumMain}>Attachement</Typography>
+            </FlexBetween>
+
+            <FlexBetween gap={"0.25rem"}>
+              <MicOutlined sx={{ color: mediumMain }} />
+              <Typography color={mediumMain}>Audio</Typography>
+            </FlexBetween>
+          </>
+        ) : (
+          <FlexBetween gap={"0.25rem"}>
+            <MoreHorizOutlined sx={{ color: mediumMain }} />
+          </FlexBetween>
+        )}
+
+        <Button
+          disabled={!post} //EMPTY STRING IS FALSE
+          onClick={handlePost}
+          sx={{
+            color: palette.background.alt,
+            backgroundColor: palette.primary.main,
+            borderRadius: "3rem",
+          }}
+        >
+          POST
+        </Button>
+      </FlexBetween>
     </WidgetWrapper>
   );
 };
+
+export default MyPostWidget;
